@@ -17,14 +17,29 @@
 local lrpc = require 'lem.lrpc'
 local utils = require 'lem.utils'
 
+
 local rpcc = lrpc.client('socket')
 local rpcc2 = lrpc.client('socket')
 
-for i=0,1000 do
+local err = 'could not connect to rpc server'
+assert(rpcc, err)
+assert(rpcc2, err)
+
+for i=1,1000 do
 
   utils.spawn(function ()
     rpcc2:cast(function () add(i,i) end)
   end)
 
   print(rpcc:call(function () add(i,i) end))
+  print(rpcc:ncall('addt', {i,i}))
 end
+
+for i,v in pairs(rpcc:stats()) do
+  print(i,v)
+end
+
+--
+-- should output:
+--     add	2000
+--     addt	1000

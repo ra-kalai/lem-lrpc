@@ -22,4 +22,8 @@ declare_rpc_fun('add', function (a,b)
   return a+b
 end)
 
+declare_rpc_fun('addt', function (t)
+  return t[1] + t[2]
+end)
+
 run_rpc_server('socket')
